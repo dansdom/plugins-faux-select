@@ -146,7 +146,7 @@
 
          selectedBox.mouseout(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","block");},opts.hideTimer);
+             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
          });
 
          selectList.find("li").mouseenter(function(){
@@ -160,7 +160,7 @@
          
          selectList.find("li").mouseleave(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","block");},opts.hideTimer);
+             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
              $(this).removeClass(opts.activeClass);
          });
 
