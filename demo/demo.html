@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title></title>
+          <!-- Meta tags -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />  <!-- w3c recomends this meta tag  -->
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />  <!-- w3c recomends this meta tag  -->
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="copyright" content="" />
+	<meta name="author" content="" />
+	<meta name="rating" content="general" />
+	<meta name="robots" content="all" />
+        <!-- Stylesheets -->
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection" />
+	    <!-- Javascripts -->
+    <script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="js/selectbox.js"></script>
+    <script language="javascript" type="text/javascript">
+    		$(document).ready(function(){
+				$(".months select").fauxSelectBox();
+				$(".numbers select").fauxSelectBox();
+			});
+    </script>
+
+</head>
+
+<body>
+
+      <div id="wrap">
+      
+      	<h1>Faux Selectbox Plugin Demo</h1>
+      
+      	   <div class="months">
+      	        <select>                    	        	
+               		<optgroup label="summer">
+	               		<option value="12" selected="selected">december</option>
+	               		<option value="1">january</option>
+	               		<option value="2">february</option>
+               		</optgroup>
+               		<optgroup label="summer">
+	               		<option value="3">march</option>
+	               		<option value="4">april</option>
+	               		<option value="5">may</option>
+               		</optgroup>              		           		
+               		<optgroup label="winter">	               		
+	               		<option value="6">june</option>
+	               		<option value="7">july</option>
+	               		<option value="8">august</option>
+               		</optgroup>
+               		<optgroup label="spring">
+	               		<option value="9">september</option>
+	               		<option value="10">october</option>
+	               		<option value="11">november</option>
+               		</optgroup>                     		       		               		       		
+               </select>               
+             </div>
+             
+             <div class="numbers">
+             	<select>
+               		<option>1</option>
+               		<option>2</option>
+               		<option>3</option>
+               		<option>4</option>
+               		<option>5</option>
+               		<option>6</option>
+               		<option>7</option>
+               		<option>8</option>
+               </select>
+             </div>
+             
+             
+
+      </div>  <!-- end of wrap div -->
+
+</body>
+</html>

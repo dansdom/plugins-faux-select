@@ -1,0 +1,34 @@
+/* Reset Styles */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,hr,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-size:100%;font-family:inherit;vertical-align:baseline}
+html {height:100%}
+body {min-height:101%;line-height:1;color:black;background:white;font:62.5%/1.4 Arial,Helvetica,sans-serif}
+h1,h2,h3,h4,h5,h6 {font-weight:bold}
+:focus {outline:0}
+ol,ul {list-style:none}
+table {border-collapse:separate;border-spacing:0/* tables still need 'cellspacing="0" */}
+caption,th,td {text-align:left; font-weight:normal}
+blockquote:before,blockquote:after,q:before,q:after {content:""}
+blockquote,q {quotes:"" ""}
+option,select {min-width:1.5em}
+ins {text-decoration:none}
+del {text-decoration:line-through}
+img,a img {border:0}
+h1 {font-size:30px;text-align:center;margin-bottom:50px}
+
+#wrap {width:900px;margin:0 auto;background:#eee;padding:100px 0 500px;overflow:hidden;height:500px}
+.box {height:50px;width:50px;float:left;margin:20px;border:1px solid green;cursor:pointer}
+
+.months, .numbers {float:left;height:30px;width:100px;position:relative;margin-left:20px}
+.months ul, .numbers ul {position:absolute;top:27px;left:0}
+.months ul ul, .numbers ul ul {position:static}
+.months li, .numbers li {display:block;height:30px;line-height:30px;width:100px;font-size:12px;font-weight:bold;border:1px solid #000;text-indent:10px;background:#fff}
+.months li li {background:#ddd}
+.selectedBox {height:25px;width:100px;background:#ccc;font-size:12px;font-weight:bold;line-height:25px;text-indent:10px;cursor:pointer;border:1px solid #000}
+.months .selectGroup {height:auto;border-bottom:0}
+.months .selectGroup label {display:block;height:25px;line-height:25px;background:#bbb}
+.months .selectGroup li {border-right:0;border-left:0;}
+.active {color:#fff;background:#333 !important}
+.active li {color:#333}
+.active label {color:#333}
+
+
