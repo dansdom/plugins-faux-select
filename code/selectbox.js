@@ -146,18 +146,21 @@
 
          selectedBox.mouseout(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
+             selectTimer = setTimeout(function(){selectList.css("display","block");},opts.hideTimer);
          });
 
          selectList.find("li").mouseenter(function(){
              clearTimeout(selectTimer);
-             $(this).addClass(opts.activeClass);
+             if ($(this).hasClass(opts.groupClass) == false)
+             {
+             	$(this).addClass(opts.activeClass);
+             }
              $(this).parents("li").removeClass(opts.activeClass);
          });
          
          selectList.find("li").mouseleave(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
+             selectTimer = setTimeout(function(){selectList.css("display","block");},opts.hideTimer);
              $(this).removeClass(opts.activeClass);
          });
 
