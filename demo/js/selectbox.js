@@ -177,7 +177,7 @@
             	} 
             	
             	// clear all the options
-            	selectBox.find("option").attr("selected", "");
+            	selectBox.find("option").removeAttr("selected");
             	
             	// number of optGroups
             	var groups = selectBox.find("optgroup").length;
