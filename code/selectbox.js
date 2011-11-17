@@ -55,12 +55,14 @@
         $.fn.fauxSelectBox.hideSelectList = function(selectList,selectBox){
                 return function(){
                     selectList.css("display","none");
+                    selectBox.next().removeClass("list-open");
                 }
         }
 
         $.fn.fauxSelectBox.showSelectList = function(selectList,selectBox){
                 return function(){
                     selectList.css("display","block");
+                    selectBox.next().addClass("list-open");
                 }
         
         }
