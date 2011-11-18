@@ -52,6 +52,20 @@
 	// note: $.fn.testPlugin.styleBox allows for this function to be extended beyond the scope of the plugin and used elsewhere,
 	// that is why it is a superior namespace. Also: anonymous function calling I think is probably better naming practise too.
 
+        $.fn.fauxSelectBox.hideSelectList = function(selectList,selectBox){
+                return function(){
+                    selectList.css("display","none");
+                    selectBox.next().removeClass("list-open");
+                }
+        }
+
+        $.fn.fauxSelectBox.showSelectList = function(selectList,selectBox){
+                return function(){
+                    selectList.css("display","block");
+                    selectBox.next().addClass("list-open");
+                }
+        
+        }
      // build the faux dropdown components
 	$.fn.fauxSelectBox.buildList = function(selectBox,opts)
 	{
@@ -141,12 +155,12 @@
 
          selectedBox.click(function(){
              clearTimeout(selectTimer);
-             selectList.css("display","block");
+             $.fn.fauxSelectBox.showSelectList(selectList,selectBox)();
          });
 
          selectedBox.mouseout(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
+             selectTimer = setTimeout($.fn.fauxSelectBox.hideSelectList(selectList,selectBox),opts.hideTimer);
          });
 
          selectList.find("li").mouseenter(function(){
@@ -160,7 +174,7 @@
          
          selectList.find("li").mouseleave(function(){
              clearTimeout(selectTimer);
-             selectTimer = setTimeout(function(){selectList.css("display","none");},opts.hideTimer);
+             selectTimer = setTimeout($.fn.fauxSelectBox.hideSelectList(selectList,selectBox),opts.hideTimer);
              $(this).removeClass(opts.activeClass);
          });
 
