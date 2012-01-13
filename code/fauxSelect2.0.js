@@ -150,17 +150,17 @@
 				selectList = selectContainer.find("." + this.opts.ulContainer);
 			}
    
-			selectedBox.click(function(){
+			selectedBox.bind('click.' + this.namespace, function(){
 				clearTimeout(selectTimer);
 				fauxSelect.showSelectList(selectList)();
 			});
    
-			selectedBox.mouseout(function(){
+			selectedBox.bind('mouseout.' + this.namespace, function(){
 				clearTimeout(selectTimer);
 				selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
 			});
    
-			selectList.find("li").mouseenter(function(){
+			selectList.find("li").bind('mouseenter.' + this.namespace, function(){
 				clearTimeout(selectTimer);
 				if ($(this).hasClass(fauxSelect.opts.groupClass) == false)
 				{
@@ -169,14 +169,14 @@
 				$(this).parents("li").removeClass(fauxSelect.opts.activeClass);
 			});
 			
-			selectList.find("li").mouseleave(function(){
+			selectList.find("li").bind('mouseleave.' + this.namespace, function(){
 				clearTimeout(selectTimer);
 				selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
 				$(this).removeClass(fauxSelect.opts.activeClass);
 			});
    
 			selectList.find("li").each(function () {
-			   $(this).click(function () {
+			   $(this).bind('click.' + fauxSelect.namespace, function () {
 				   
 				   // check whether you are clicking on an optgroup
 				   // if clicking on the label, then return without doing anything
