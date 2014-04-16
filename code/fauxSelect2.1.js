@@ -8,14 +8,14 @@
 // when is a select box not a select box?
 // version 1.0 - initial build
 // version 2.0 - integrated new plugin architecture: https://github.com/dansdom/plugins-template-v2
+// version 2.1 - added option for the list to stay open. Cleaned up the code a bit
 
 (function ($) {
 	// this ones for you 'uncle' Doug!
 	'use strict';
 	
 	// Plugin namespace definition
-	$.FauxSelectBox = function (options, element, callback)
-	{
+	$.FauxSelectBox = function (options, element, callback) {
 		// wrap the element in the jQuery object
 		this.el = $(element);
 		// this is the namespace for all bound event handlers in the plugin
@@ -24,8 +24,7 @@
 		this.opts = $.extend(true, {}, $.FauxSelectBox.settings, options);
 		this.init();
 		// run the callback function if it is defined
-		if (typeof callback === "function")
-		{
+		if (typeof callback === "function") {
 			callback.call();
 		}
 	};
@@ -37,7 +36,8 @@
         'ulWrapper' : true,
         'ulContainer' : 'listContainer',
         'activeClass' : 'active',
-        'groupClass' : 'selectGroup'
+        'groupClass' : 'selectGroup',
+        'stayOpen' : false
 	};
 	
 	// plugin functions go here
@@ -52,37 +52,39 @@
 			
 			// build the list from the selectbox and then hide the original
 			this.buildList();
-			
+
 			// add event handling to the list
-			this.addEvents()
+			this.addEvents();
+
+			if (this.opts.stayOpen) {
+				if (this.opts.ulWrapper) {
+					// have the select list open
+					this.el.parent().find('.' + myObject.opts.ulContainer).css('display', 'block');
+				} else {
+					this.el.parent().find('ul').css('display', '');
+				}
+			}
 			
 		},
 		// build the faux dropdown components
-		buildList : function()
-		{
+		buildList : function() {
 			var fauxSelect = "",
 				selectList = this.el.children(),
 				selectLength = selectList.length,
 				selectedItem = "",
-				i,
-				j;
+				i, j;
 				//console.log(selectLength);
 				
-			if (this.opts.ulWrapper == true)
-			{
+			if (this.opts.ulWrapper == true) {
 				fauxSelect = "<div class='" + this.opts.ulContainer + "' style='display:none'><ul>";
-			}
-			else
-			{
+			} else {
 				fauxSelect = "<ul style='display:none'>";
 			}
 			
-			for (i = 0; i < selectLength; i++)
-			{
+			for (i = 0; i < selectLength; i++) {
 				// I need to test for option groups and then construct them as well
 				//console.log(selectList[i]);
-				if (selectList[i].nodeName == "OPTGROUP")
-				{
+				if (selectList[i].nodeName == "OPTGROUP") {
 					var optGroup = $(selectList[i]),
 						groupList = "<li class='" + this.opts.groupClass + "'>",
 						// get the label on the optgroup and add that to the list         	 	
@@ -90,49 +92,36 @@
 						
 					groupList += "<label>" + groupLabel + "</label><ul>";
 					// iterate over the optgroup and construct a sublist
-					for (j = 0; j < optGroup.children().length; j++)
-					{
-						var groupItem = optGroup.children(":eq(" + j + ")");  
-						//console.log(groupItem.attr("selected"));         	 		   
-						//console.log(groupList);    	 		
+					for (j = 0; j < optGroup.children().length; j++) {
+						var groupItem = optGroup.children(":eq(" + j + ")");     	 		
 						groupList += "<li value='" + groupItem.attr("value") + "' selected='" + groupItem.attr("selected") + "' class='" + this.opts.groupClass + j + "'>" + groupItem.html() + "</li>";
-						//console.log(groupList);
-						if (groupItem.attr("selected") == true)
-						{
+						if (groupItem.attr("selected") == true) {
 							selectedItem = groupItem.html();
 						}
 					}         	 	      	 	
 					groupList += "</ul></li>";
 					//console.error(groupList);
 					fauxSelect += groupList;
-				}
-				else
-				{
+				} else {
 					fauxSelect += "<li value='" + selectList[i].value + "' selected='" + selectList[i].selected + "' class='option" + i + "'>" + selectList[i].text + "</li>";
 				}
 				 
-				if (selectList[i].selected == true)
-				{
+				if (selectList[i].selected == true) {
 					selectedItem = selectList[i].text;
 				}
 			}
 			 
-			if (this.opts.ulWrapper == true)
-			{
+			if (this.opts.ulWrapper == true) {
 				fauxSelect += "</ul></div>";
-			}
-			else
-			{
+			} else {
 				fauxSelect += "</ul>";
 			}
-			//console.log(fauxSelect);
 			
 			this.el.css("display", "none");
 			this.el.parent().append("<div class='" + this.opts.selectedBox + "'>" + selectedItem + "</div>").append(fauxSelect);
 		},
 		// add event handling for all objects
-		addEvents : function()
-		{
+		addEvents : function() {
 			var fauxSelect = this,
 				selectContainer = fauxSelect.el.parent(),
 				selectList = selectContainer.find("ul"),
@@ -141,8 +130,7 @@
 				optionValue,
 				selectedBox = selectContainer.find("." + this.opts.selectedBox);
 				
-			if (this.opts.ulWrapper == true)
-			{
+			if (this.opts.ulWrapper == true) {
 				selectList = selectContainer.find("." + this.opts.ulContainer);
 			}
    
@@ -150,34 +138,34 @@
 				clearTimeout(selectTimer);
 				fauxSelect.showSelectList(selectList)();
 			});
-   
-			selectedBox.bind('mouseout.' + this.namespace, function(){
-				clearTimeout(selectTimer);
-				selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
-			});
-   
-			selectList.find("li").bind('mouseenter.' + this.namespace, function(){
-				clearTimeout(selectTimer);
-				if ($(this).hasClass(fauxSelect.opts.groupClass) == false)
-				{
-				   $(this).addClass(fauxSelect.opts.activeClass);
-				}
-				$(this).parents("li").removeClass(fauxSelect.opts.activeClass);
-			});
-			
-			selectList.find("li").bind('mouseleave.' + this.namespace, function(){
-				clearTimeout(selectTimer);
-				selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
-				$(this).removeClass(fauxSelect.opts.activeClass);
-			});
+
+			if (!this.opts.stayOpen) {
+				selectedBox.bind('mouseout.' + this.namespace, function(){
+					clearTimeout(selectTimer);
+					selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
+				});
+	   
+				selectList.find("li").bind('mouseenter.' + this.namespace, function(){
+					clearTimeout(selectTimer);
+					if ($(this).hasClass(fauxSelect.opts.groupClass) == false) {
+					   $(this).addClass(fauxSelect.opts.activeClass);
+					}
+					$(this).parents("li").removeClass(fauxSelect.opts.activeClass);
+				});
+				
+				selectList.find("li").bind('mouseleave.' + this.namespace, function(){
+					clearTimeout(selectTimer);
+					selectTimer = setTimeout(fauxSelect.hideSelectList(selectList), fauxSelect.opts.hideTimer);
+					$(this).removeClass(fauxSelect.opts.activeClass);
+				});
+			}
    
 			selectList.find("li").each(function () {
 			   $(this).bind('click.' + fauxSelect.namespace, function () {
 				   
 				   // check whether you are clicking on an optgroup
 				   // if clicking on the label, then return without doing anything
-				   if ($(this).hasClass(fauxSelect.opts.groupClass))
-				   {
+				   if ($(this).hasClass(fauxSelect.opts.groupClass)) {
 					   //console.log("i must be a label");
 					   return false;
 				   } 
@@ -193,28 +181,19 @@
 				   clickIndex = $(this).parent().children().index(this);
 				   
 				   // get the value of the select box
-				   if ($(this).parents().hasClass(fauxSelect.opts.groupClass))
-				   {
-					   var itemPos = clickIndex;
-					   //console.log("item pos: "+itemPos);
-					   //console.log("true");
-					   
-					   
-					   // overall index of the item being clicked
-					   var overallIndex = $("." + fauxSelect.opts.ulContainer).find("li").index($(this));
-					   //console.log("overall index: "+overallIndex);
-					   
-					   // get the index of this select group
-					   var selectGroup = $(this).parents("." + fauxSelect.opts.groupClass);            	            		
-					   
-					   // the index of the group
-					   var groupIndex = selectGroup.parent().children().index(selectGroup);
-					   //console.log("group index: "+groupIndex);
-					   
-					   // find the groups before this one            		
-					   var groupNumber = 0;
-					   for (var x = 0; x < overallIndex; x++)
-					   {            			
+				   if ($(this).parents().hasClass(fauxSelect.opts.groupClass)) {
+					   var itemPos = clickIndex,
+					       // overall index of the item being clicked
+					       overallIndex = $("." + fauxSelect.opts.ulContainer).find("li").index($(this)),
+					       //console.log("overall index: "+overallIndex);
+					       // get the index of this select group
+					       selectGroup = $(this).parents("." + fauxSelect.opts.groupClass),
+					       // the index of the group
+					       groupIndex = selectGroup.parent().children().index(selectGroup),
+					       // find the groups before this one            		
+					       groupNumber = 0;
+
+					   for (var x = 0; x < overallIndex; x++) {            			
 						   if ($("." + fauxSelect.opts.ulContainer).find("li:eq(" + x + ")").hasClass("selectGroup"))
 						   {
 							   groupNumber += 1;
@@ -225,10 +204,7 @@
 					   clickIndex = overallIndex - groupNumber;
 					   var selectIndex = overallIndex - groupNumber;            		            		
 					   fauxSelect.el.find("option:eq(" + clickIndex + ")").attr("selected", "selected");    
-					   
-				   }
-				   else
-				   {            		
+				   } else {            		
 					   fauxSelect.el.children(":eq(" + clickIndex + ")").attr("selected", "selected");
 				   }
 																						   
@@ -236,14 +212,12 @@
 				   var selectedText = $(this).html();
 				   selectedBox.html(selectedText);
 				   clearTimeout(selectTimer);
-				   selectList.css("display","none");
+				   if (!fauxSelect.opts.stayOpen) {
+				   	    selectList.css("display","none");
+				   }	
 				   return false;
 			   });
 		   });
-			// test that select box has fired change event
-			//selectBox.change(function(){
-			//    console.log("changed");
-			//});
 		},
 		// hide the select list
 		hideSelectList : function(selectList) {
